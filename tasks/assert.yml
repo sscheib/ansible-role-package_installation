@@ -1,0 +1,38 @@
+---
+# NOTE: _pgi_quiet_assert does not impact this task, as it first needs to be ensured that it actually is
+#       properly defined
+- name: 'Ensure mandatory variables, as  well as variables, which have a default value, are set (boolean)'
+  ansible.builtin.assert:
+    that:
+      - "lookup('ansible.builtin.vars', item) is defined"
+      - "lookup('ansible.builtin.vars', item) | bool | string == lookup('ansible.builtin.vars', item) | string"
+      - "lookup('ansible.builtin.vars', item) is boolean"
+    success_msg: "Variable '{{ item }}' defined properly - value: '{{ lookup('ansible.builtin.vars', item) }}'"
+    fail_msg: "Variable '{{ item }}' failed to validate"
+  loop:
+    - '_pgi_quiet_assert'
+  loop_control:
+    label: 'variable: {{ item }}'
+
+- name: 'Ensure _pgi_packages is defined properly'
+  ansible.builtin.assert:
+    that:
+      # _pkg.name
+      - '_pkg.name is defined'
+      - '_pkg.name is string'
+      - '_pkg.name != None'
+      - "_pkg.name != ''"
+
+      # _pkg.state
+      - '(_pkg.state is defined) | ternary(_pkg.state | default(None) is string, true)'
+      - '(_pkg.state is defined) | ternary(_pkg.state | default(None) != None, true)'
+      - "(_pkg.state is defined) | ternary(_pkg.state | default(None) != '', true)"
+      - "(_pkg.state is defined) | ternary(_pkg.state | default(None) in ['latest', 'present'], true)"
+    success_msg: 'Packages are defined correctly'
+    fail_msg: 'One or more packages failed to validated correctly'
+    quiet: '{{ _pgi_quiet_assert }}'
+  no_log: true
+  loop: '{{ _pgi_packages }}'
+  loop_control:
+    loop_var: '_pkg'
+...

@@ -1,0 +1,16 @@
+---
+- name: 'Include tasks to ensure all variables are defined properly'
+  ansible.builtin.include_tasks:
+    file: 'assert.yml'
+
+- name: 'Ensure operating system facts are gathered'
+  ansible.builtin.setup:
+    gather_subset:
+      - '!all'
+      - '!min'
+      - 'os_family'
+
+- name: 'Include tasks to install packages'
+  ansible.builtin.include_tasks:
+    file: 'package_installation.yml'
+...

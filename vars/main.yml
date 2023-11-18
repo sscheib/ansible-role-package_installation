@@ -1,0 +1,7 @@
+---
+# Packages to install
+_pgi_packages: '{{ pgi_packages | mandatory }}'
+
+# Whether to quiet assert statements
+_pgi_quiet_assert: '{{ pgi_quiet_assert | default(_def_pgi_quiet_assert) }}'
+...

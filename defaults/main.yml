@@ -1,0 +1,4 @@
+---
+# Whether to quiet assert statements
+_def_pgi_quiet_assert: false
+...

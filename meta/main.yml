@@ -1,0 +1,24 @@
+---
+galaxy_info:
+  role_name: 'package_installation'
+  namespace: 'sscheib'
+  author: 'Steffen Scheib'
+  description: 'Very simple role to install packages'
+  issue_tracker_url: 'https://github.com/sscheib/ansible-role-package_installation/issues'
+  license: 'GPL-2.0-or-later'
+  min_ansible_version: '2.12'
+  platforms:
+    - name: 'EL'
+      versions:
+        - '9'
+        - '8'
+
+    - name: 'Debian'
+      versions:
+        - 'bookworm'
+        - 'buster'
+
+  galaxy_tags:
+    - 'packageinstallation'
+dependencies: []
+...
