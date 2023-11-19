@@ -13,4 +13,7 @@
 - name: 'Include tasks to install packages'
   ansible.builtin.include_tasks:
     file: 'package_installation.yml'
+  when: >
+    _pgi_packages is defined
+    and _pgi_packages | length > 0
 ...

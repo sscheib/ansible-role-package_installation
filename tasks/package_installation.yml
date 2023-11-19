@@ -1,6 +1,6 @@
 ---
-- name: >-
-    Ensure packages that have the state latest are installed with the latest available version  # noqa: package-latest
+- name: >-  # noqa: package-latest
+    Ensure packages that have the state latest are installed with the latest available version
   ansible.builtin.package:
     name: >-
       {{
@@ -12,6 +12,11 @@
     state: 'latest'
     update_cache: true
   become: true
+  when: >
+    _pgi_packages |
+    selectattr('state', 'defined') |
+    selectattr('state', '==', 'latest') |
+    map(attribute='name') | length > 0
 
 - name: 'Ensure all other packages provided are present'
   ansible.builtin.package:
@@ -29,4 +34,15 @@
     state: 'present'
     update_cache: true
   become: true
+  when: >
+    (
+      _pgi_packages |
+      selectattr('state', 'undefined') |
+      map(attribute='name')
+      +
+      _pgi_packages |
+      selectattr('state', 'defined') |
+      rejectattr('state', '==', 'latest') |
+      map(attribute='name')
+    ) | length > 0
 ...
